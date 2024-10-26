@@ -2,6 +2,13 @@
 
 Some my modules for Lua which I wanted to share with everyone else.
 
+You can install them using Luvit's lit utility:
+```sh
+$ lit install er2off/class
+$ lit install er2off/events
+# and so on...
+```
+
 # Class
 
 Best module, IMHO. Implements nice-styled classes.

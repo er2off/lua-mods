@@ -1,3 +1,16 @@
+--[[lit-meta
+	name = 'er2off/dump'
+	version = '1.0.0'
+	homepage = 'https://github.com/er2off/lua-mods'
+	description = 'Simple table dumping utility.'
+	tags = {'lua', 'table', 'dump'}
+	license = 'Zlib'
+	author = {
+		name = 'Er2',
+		email = 'er2@dismail.de'
+	}
+]]
+
 -- dump(table, depth?) - Return string that shows table contents.
 local function dump(v, d)
 	if type(d) ~= 'number' or d < 0

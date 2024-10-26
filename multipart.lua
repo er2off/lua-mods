@@ -3,7 +3,7 @@
 -- Zlib License
 
 --[[lit-meta
-	name = 'er2/multipart'
+	name = 'er2off/multipart'
 	version = '1.0.0'
 	homepage = 'https://github.com/er2off/lua-mods'
 	description = 'Multipart (form-data) implementation'

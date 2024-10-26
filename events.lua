@@ -6,7 +6,7 @@
 -- @module Events
 
 --[[lit-meta
-	name = 'er2/events'
+	name = 'er2off/events'
 	version = '1.0.0'
 	homepage = 'https://github.com/er2off/lua-mods'
 	description = 'Event handler class with Node.js-like API.'

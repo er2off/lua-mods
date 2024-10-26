@@ -6,7 +6,7 @@
 -- @module Object
 
 --[[lit-meta
-	name = 'er2/class'
+	name = 'er2off/class'
 	version = '1.0.0'
 	homepage = 'https://github.com/er2off/lua-mods'
 	description = 'Class library based on Lua syntax sugar with omitting parentheses.'
