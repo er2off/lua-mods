@@ -18,7 +18,7 @@
 	}
 ]]
 
-local class, new = require 'class' ()
+require 'class'
 
 --- Events class
 -- @type Events
@@ -96,7 +96,22 @@ class 'Events' {
 		end
 	end,
 
-	_ev = function(this, t, i, name, ...)
+	--- Prepends variable to callback call for all events.
+	-- @tparam Events this
+	-- @tparam any arg Argument which will be prepended for this event class
+	-- @usage
+	-- handler:addArg {'example'}
+	-- handler:on('test', function(t, ...)
+	--   assert(t[1] == 'example')
+	-- end)
+	addArg = function(this, arg)
+		local prevEv = this._ev
+		function this._ev(t, i, name, ...)
+			prevEv(t, i, name, arg, ...)
+		end
+	end,
+
+	_ev = function(t, i, name, ...)
 		local v = t[i]
 		if v.name == name then
 			v.func(...)
@@ -119,7 +134,7 @@ class 'Events' {
 			and type(v.name) == 'string'
 			and type(v.type) == 'string'
 			and type(v.func) == 'function'
-			then this:_ev(t, i, name, ...)
+			then this._ev(t, i, name, ...)
 			else print 'Invalid event'
 				if v then print(v, v.name, v.type, v.func)
 				else print 'nil' end
@@ -143,22 +158,10 @@ class 'Events' {
 -- end)
 -- inst:emit('trigger', 'Test!')
 class 'EventsThis' : inherits 'Events' {
-	--- Prepends this argument to callbacks.
-	--
-	-- <h1>Don't use it directly!</h1>
-	-- @tparam EventsThis this
-	-- @tparam table t Events table.
-	-- @tparam number i Event number.
-	-- @tparam string name Event name.
-	-- @param ... Optional arguments.
-	-- @see Events
-	_ev = function(this, t, i, name, ...)
-		local v = t[i]
-		if v.name == name then
-			v.func(this, ...)
-			if v.type == 'once'
-			then table.remove(t, i)
-			end
-		end
+	--- Builds EventsNew class and adds this as argument
+	-- @function init
+	function(this)
+		this:super()
+		this:addArg(this)
 	end,
 }

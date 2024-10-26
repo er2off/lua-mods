@@ -87,6 +87,9 @@ function new(name)
 	end
 end
 
+_G.class = class
+_G.new = new
+
 --- Basic object metatable for classes.
 -- @type Object
 
@@ -125,14 +128,19 @@ end
 -- @param ... params Parameters which will be passed to parent method.
 function Object:superM(meth, ...)
 	local o, fn = self
+	-- lock to prevent class2:super() -> class1:super() -> class2:super() loop
+	local lck = '__lock_'.. meth
 	repeat o = o.__super
 		fn = o[meth]
-	until fn or not o
+	until (fn or not o) and not o[lck]
+	o[lck] = true
 	-- don't raise error, should we?
 	if not fn
 	then return nil
 	end
-	return fn(self, ...)
+	local arg = {fn(self, ...)}
+	o[lck] = nil
+	return (table.unpack or unpack)(arg)
 end
 
 --- Calls parent constructor.
@@ -151,13 +159,13 @@ end
 -- Prints only first 5 parents, others will be omitted.
 -- @treturn string
 function Object:__tostring()
-	local str = 'Class <'.. self.__name ..'>'
+	local str = 'Class "'.. self.__name ..'"'
 	-- get some inherits to avoid long strings
 	for _ = 1, 5 do
 		self = self.__super
 		if not self or self == Object
 		then self = nil break end
-		str = str.. ' inherits '.. self.__name
+		str = str.. ' <= "'.. self.__name ..'"'
 	end
 	if self then str = str.. '...' end
 	return str
@@ -179,5 +187,3 @@ function Object:__call(t)
 	-- start static constructor
 	self:__static()
 end
-
-return function() return class, new end
